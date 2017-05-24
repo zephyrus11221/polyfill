@@ -1,0 +1,95 @@
+frames 60
+basename drawing
+push
+move 420 0 0 slide
+move -70 250 0
+rotate z -360 roll
+sphere 0 0 0 50 
+push
+rotate x 360 roll
+sphere 0 -120 0 20
+pop
+push
+rotate z 90
+rotate y 360 roll
+rotate x 360 roll
+torus 0 0 0 30 225
+pop
+push
+move 0 -120 0
+push
+rotate z 360 roll
+rotate x 90
+torus 0 0 0 20 50
+pop
+pop
+move 0 120 0
+push
+rotate z 360 roll
+rotate x 90
+torus 0 0 0 20 50
+pop
+pop
+push
+move 420 0 0 slide
+move 350 250 0
+rotate z -360 roll
+sphere 0 0 0 50 
+push
+rotate x 360 roll
+sphere 0 -120 0 20
+pop
+push
+rotate z 90
+rotate y 360 roll
+rotate x 360 roll
+torus 0 0 0 30 225
+pop
+push
+move 0 -120 0
+push
+rotate z 360 roll
+rotate x 90
+torus 0 0 0 20 50
+pop
+pop
+move 0 120 0
+push
+rotate z 360 roll
+rotate x 90
+torus 0 0 0 20 50
+pop
+pop
+push
+move 420 0 0 slide
+move -490 250 0
+rotate z -360 roll
+sphere 0 0 0 50 
+push
+rotate x 360 roll
+sphere 0 -120 0 20
+pop
+push
+rotate z 90
+rotate y 360 roll
+rotate x 360 roll
+torus 0 0 0 30 225
+pop
+push
+move 0 -120 0
+push
+rotate z 360 roll
+rotate x 90
+torus 0 0 0 20 50
+pop
+pop
+move 0 120 0
+push
+rotate z 360 roll
+rotate x 90
+torus 0 0 0 20 50
+pop
+pop
+
+vary slide 0 59 0 1
+vary roll 0 59 0 3
