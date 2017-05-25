@@ -53,21 +53,74 @@ def draw_polygons( matrix, screen, color ):
                 hold = high
                 high = mid
                 mid = hold
-            rr1 = -(low[0]-high[0])/(low[1]-high[1])
-            rr2 = -(low[0]-mid[0])/(low[1]-mid[1])
-            rr3 = (high[0]-mid[0])/(high[1]-mid[1])
+            
+            if low[1]-high[1] == 0:
+                rr1 = low[0]-high[0]
+            else:
+                rr1 = -(low[0]-high[0])/(low[1]-high[1])
+            if low[1]-mid[1] == 0:
+                rr2 = -(low[0]-mid[0])
+            else:
+                rr2 = -(low[0]-mid[0])/(low[1]-mid[1])
+            if high[1]-mid[1] == 0:
+                rr3 = (high[0]-mid[0])
+            else:
+                rr3 = (high[0]-mid[0])/(high[1]-mid[1])
             x0 = low[0]
-            y0 = low[1]    
+            y = low[1]    
             x1 = low[0]
-            y1 = low[1]
-            while x1<mid[0]:
-                draw_line( x0, y0
-                           x1, y1,
+            color[0] = (color[0]+17)%255
+            color[1] = (color[1]+53)%255
+            color[2] = (color[2]+137)%255
+            while y<mid[1]:
+                draw_line( int(x0), int(y),
+                           int(x1), int(y),
                            screen, color)
                 x0+=rr1
-                x1+=rr2
-                y0+=1
-                y1+=1
+                x1+=rr3
+                y+=1
+            while y<high[1]:
+                draw_line( int(x0), int(y),
+                           int(x1), int(y),
+                           screen, color)
+                x0+=rr1
+                x1+=rr3
+                y+=1
+
+            '''
+            if x1<mid[0]:
+                while x1<mid[0]:
+                    draw_line( int(x0), int(y),
+                            int(x1), int(y),
+                            screen, color)
+                    x0+=rr1
+                    x1+=rr2
+                    y+=1
+            else:
+                while x1>mid[0]:
+                    draw_line( int(x0), int(y),
+                            int(x1), int(y),
+                            screen, color)
+                    x0+=rr1
+                    x1+=rr2
+                    y+=1
+            if x1<high[0]:
+                while x1<high[0]:
+                    draw_line( int(x0), int(y),
+                            int(x1), int(y),
+                            screen, color)
+                    x0+=rr1
+                    x1+=rr3
+                    y+=1
+            else:
+                while x1>high[0]:
+                    draw_line( int(x0), int(y),
+                            int(x1), int(y),
+                            screen, color)
+                    x0+=rr1
+                    x1+=rr3
+                    y+=1
+            '''
         point+= 3
 
 
