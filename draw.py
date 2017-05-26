@@ -13,7 +13,7 @@ def draw_polygons( matrix, screen, color ):
     if len(matrix) < 2:
         print 'Need at least 3 points to draw'
         return
-
+    colhold = color[:]
     point = 0    
     while point < len(matrix) - 2:
 
@@ -53,7 +53,12 @@ def draw_polygons( matrix, screen, color ):
                 hold = high
                 high = mid
                 mid = hold
-            
+
+            print "printing points:"
+            print low
+            print mid
+            print high
+                
             if low[1]-high[1] == 0:
                 rr1 = low[0]-high[0]
             else:
@@ -66,23 +71,29 @@ def draw_polygons( matrix, screen, color ):
                 rr3 = (high[0]-mid[0])
             else:
                 rr3 = (high[0]-mid[0])/(high[1]-mid[1])
+            print "printing rr1:"
+            print rr1
+            print "printing rr2:"
+            print rr2
+            print "printing rr3:"
+            print rr3
             x0 = low[0]
             y = low[1]    
             x1 = low[0]
-            color[0] = (color[0]+17)%255
-            color[1] = (color[1]+53)%255
-            color[2] = (color[2]+137)%255
+            colhold[0] = (colhold[0]+17)%255
+            colhold[1] = (colhold[1]+53)%255
+            colhold[2] = (colhold[2]+137)%255
             while y<mid[1]:
                 draw_line( int(x0), int(y),
                            int(x1), int(y),
-                           screen, color)
+                           screen, colhold)
                 x0+=rr1
                 x1+=rr3
                 y+=1
             while y<high[1]:
                 draw_line( int(x0), int(y),
                            int(x1), int(y),
-                           screen, color)
+                           screen, colhold)
                 x0+=rr1
                 x1+=rr3
                 y+=1
@@ -122,6 +133,7 @@ def draw_polygons( matrix, screen, color ):
                     y+=1
             '''
         point+= 3
+        #color = colhold[:]
 
 
 def add_box( polygons, x, y, z, width, height, depth ):

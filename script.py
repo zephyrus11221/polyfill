@@ -287,7 +287,8 @@ def run(filename):
                 elif c == 'rotate':
                     theta = args[1] * (math.pi/180)
                     if(type(args[-1]) is str):
-                        theta *= symbols[args[-1]]
+                        print type(symbols[args[-1]])
+                        theta = symbols[args[-1]] * args[1] * (math.pi/180)
                     if args[0] == 'x':
                         tmp = make_rotX(theta)
                     elif args[0] == 'y':
