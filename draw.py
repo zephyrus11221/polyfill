@@ -60,15 +60,15 @@ def draw_polygons( matrix, screen, color ):
             print high
                 
             if low[1]-high[1] == 0:
-                rr1 = low[0]-high[0]
+                rr1 = 0
             else:
                 rr1 = -(low[0]-high[0])/(low[1]-high[1])
             if low[1]-mid[1] == 0:
-                rr2 = -(low[0]-mid[0])
+                rr2 = 0
             else:
                 rr2 = -(low[0]-mid[0])/(low[1]-mid[1])
             if high[1]-mid[1] == 0:
-                rr3 = (high[0]-mid[0])
+                rr3 = 0
             else:
                 rr3 = (high[0]-mid[0])/(high[1]-mid[1])
             print "printing rr1:"
@@ -80,6 +80,8 @@ def draw_polygons( matrix, screen, color ):
             x0 = low[0]
             y = low[1]    
             x1 = low[0]
+                if int(low[1]) == int(mid[1]):
+                    x1 = mid[0]
             colhold[0] = (colhold[0]+17)%255
             colhold[1] = (colhold[1]+53)%255
             colhold[2] = (colhold[2]+137)%255
