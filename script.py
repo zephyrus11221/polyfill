@@ -105,7 +105,7 @@ def second_pass( commands, symbols, num_frames ):
                     n += t                
 
             else:
-                print 'yallo'
+                #print 'yallo'
                 n = i[4]
                 t = (float(i[5])-i[4])/(i[3]-i[2])
                 iframe = i[2]
@@ -115,7 +115,7 @@ def second_pass( commands, symbols, num_frames ):
                     knobs[iframe][i[1]] = n
                     iframe += 1
                     n += t                
-    print knobs
+    #print knobs
     pass
 
 
@@ -128,8 +128,8 @@ def run(filename):
     ident( tmp )
 
     p = mdl.parseFile(filename)
-    print p
-    print 'printed p'
+    #print p
+    #print 'printed p'
     if p:
         (commands, symbols) = p
     else:
@@ -143,9 +143,9 @@ def run(filename):
     step = 0.1
 
     anim = first_pass(commands, symbols)
-    print 'printing anim: ' + str(anim)
+    #print 'printing anim: ' + str(anim)
     if(not anim):
-        print 'oh'
+        #print 'oh'
         for command in commands:
             print command
             c = command[0]
@@ -213,7 +213,7 @@ def run(filename):
             for knob in knobs[fn]:
                 symbols[knob] = knobs[fn][knob]
             for command in commands:
-                print command
+                #print command
                 c = command[0]
                 args = command[1:]
 
@@ -256,9 +256,9 @@ def run(filename):
                             nargs.append(args[x] * symbols[args[-1]])
                     else:
                         nargs = args
-                    print 'printing args/nargs:'
-                    print args
-                    print nargs
+                    #print 'printing args/nargs:'
+                    #print args
+                    #print nargs
                     tmp = make_translate(nargs[0], nargs[1], nargs[2])
                     matrix_mult(stack[-1], tmp)
                     stack[-1] = [x[:] for x in tmp]
