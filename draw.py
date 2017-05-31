@@ -74,12 +74,14 @@ def draw_polygons( matrix, screen, color ):
                 rr3 = 0
             else:
                 rr3 = (high[0]-mid[0])/(high[1]-mid[1])
+                
             print "printing rr1:"
             print rr1
             print "printing rr2:"
             print rr2
             print "printing rr3:"
             print rr3
+            
             x0 = low[0]
             y = low[1]    
             x1 = low[0]
@@ -90,7 +92,7 @@ def draw_polygons( matrix, screen, color ):
                            int(x1), int(y),
                            screen, colhold)
                 x0+=rr1
-                x1+=rr3
+                x1+=rr2
                 y+=1
             while y<high[1]:
                 draw_line( int(x0), int(y),
