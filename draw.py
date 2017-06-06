@@ -73,20 +73,7 @@ def draw_polygons( matrix, screen, color ):
                 rr3 = 0
             else:
                 rr3 = (high[0]-mid[0])/(high[1]-mid[1])
-            ''' 
-            if low[1] - (high[1]) == 0:
-                rr1 = 0
-            else:
-                rr1 = (low[0]-high[0])/(low[1]-high[1])
-            if (low[1]) - (mid[1]) == 0:
-                rr2 = 0
-            else:
-                rr2 = (low[0]-mid[0])/(low[1]-mid[1])
-            if (high[1]) - (mid[1]) == 0:
-                rr3 = 0
-            else:
-                rr3 = (high[0]-mid[0])/(high[1]-mid[1])
-            '''
+
             print "printing rr1:"
             print rr1
             print "printing rr2:"
@@ -95,61 +82,28 @@ def draw_polygons( matrix, screen, color ):
             print rr3
             
             x0 = low[0]
-            y = low[1]    
+            y = int(low[1])    
             x1 = low[0]
             
             if int(low[1]) == int(mid[1]):
                 x1 = mid[0]
+                print "x1 to mid"
             
             while y<int(mid[1]):
-                draw_line( int(x0), int(y),
-                           int(x1), int(y),
+                draw_line( int(x0), y,
+                           int(x1), (y),
                            screen, colhold)
                 x0+=rr1
                 x1+=rr2
                 y+=1
+            x1 = mid[0]
             while y<int(high[1]):
-                draw_line( int(x0), int(y),
-                           int(x1), int(y),
+                draw_line( int(x0), (y),
+                           int(x1), (y),
                            screen, colhold)
                 x0+=rr1
                 x1+=rr3
                 y+=1
-
-            '''
-            if x1<mid[0]:
-                while x1<mid[0]:
-                    draw_line( int(x0), int(y),
-                            int(x1), int(y),
-                            screen, color)
-                    x0+=rr1
-                    x1+=rr2
-                    y+=1
-            else:
-                while x1>mid[0]:
-                    draw_line( int(x0), int(y),
-                            int(x1), int(y),
-                            screen, color)
-                    x0+=rr1
-                    x1+=rr2
-                    y+=1
-            if x1<high[0]:
-                while x1<high[0]:
-                    draw_line( int(x0), int(y),
-                            int(x1), int(y),
-                            screen, color)
-                    x0+=rr1
-                    x1+=rr3
-                    y+=1
-            else:
-                while x1>high[0]:
-                    draw_line( int(x0), int(y),
-                            int(x1), int(y),
-                            screen, color)
-                    x0+=rr1
-                    x1+=rr3
-                    y+=1
-            '''
         point+= 3
 
 
@@ -356,7 +310,7 @@ def add_point( matrix, x, y, z=0 ):
     matrix.append( [x, y, z, 1] )
     
 
-
+'''
 
 def draw_line( x0, y0, x1, y1, screen, color ):
 
@@ -441,3 +395,79 @@ def draw_line( x0, y0, x1, y1, screen, color ):
         #end octant 7
     #end octants 2 and 7
 #end draw_line
+'''
+def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
+
+    #swap points if going right -> left
+    if x0 > x1:
+        xt = x0
+        yt = y0
+        zt = z0
+        x0 = x1
+        y0 = y1
+        z0 = z1
+        x1 = xt
+        y1 = yt
+        z1 = zt
+
+    x = x0
+    y = y0
+    z = z0
+    A = 2 * (y1 - y0)
+    B = -2 * (x1 - x0)
+    wide = False
+    tall = False
+
+    if ( abs(x1-x0) >= abs(y1 - y0) ): #octants 1/8
+        wide = True
+        loop_start = x
+        loop_end = x1
+        dx_east = dx_northeast = 1
+        dy_east = 0
+        d_east = A
+        distance = x1 - x
+        if ( A > 0 ): #octant 1
+            d = A + B/2
+            dy_northeast = 1
+            d_northeast = A + B
+        else: #octant 8
+            d = A - B/2
+            dy_northeast = -1
+            d_northeast = A - B
+
+    else: #octants 2/7
+        tall = True
+        dx_east = 0
+        dx_northeast = 1
+        distance = abs(y1 - y)
+        if ( A > 0 ): #octant 2
+            d = A/2 + B
+            dy_east = dy_northeast = 1
+            d_northeast = A + B
+            d_east = B
+            loop_start = y
+            loop_end = y1
+        else: #octant 7
+            d = A/2 - B
+            dy_east = dy_northeast = -1
+            d_northeast = A - B
+            d_east = -1 * B
+            loop_start = y1
+            loop_end = y
+
+    while ( loop_start < loop_end ):
+        plot( screen, zbuffer, color, x, y, z )
+        if ( (wide and ((A > 0 and d > 0) or (A < 0 and d < 0))) or
+             (tall and ((A > 0 and d < 0) or (A < 0 and d > 0 )))):
+            x+= dx_northeast
+            y+= dy_northeast
+            d+= d_northeast
+        else:
+            x+= dx_east
+            y+= dy_east
+            d+= d_east
+        loop_start+= 1
+
+    plot( screen, zbuffer, color, x, y, z )
+
+    
