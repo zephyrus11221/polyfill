@@ -139,6 +139,7 @@ def run(filename):
     ident(tmp)
     stack = [ [x[:] for x in tmp] ]
     screen = new_screen()
+    zbuffer = new_zbuffer
     tmp = []
     step = 0.1
 
@@ -156,19 +157,19 @@ def run(filename):
                         args[0], args[1], args[2],
                         args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, color)
+                draw_polygons(tmp, screen, color, zbuffer)
                 tmp = []
             elif c == 'sphere':
                 add_sphere(tmp,
                            args[0], args[1], args[2], args[3], step)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, color)
+                draw_polygons(tmp, screen, color, zbuffer)
                 tmp = []
             elif c == 'torus':
                 add_torus(tmp,
                           args[0], args[1], args[2], args[3], args[4], step)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, color)
+                draw_polygons(tmp, screen, color, zbuffer)
                 tmp = []
             elif c == 'move':
                 tmp = make_translate(args[0], args[1], args[2])

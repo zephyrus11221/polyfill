@@ -20,9 +20,25 @@ def new_screen( width = XRES, height = YRES ):
             screen[y].append( DEFAULT_COLOR[:] )
     return screen
 
+def new_zbuffer( width = XRES, height = YRES ):
+    zbuffer = []
+    for y in range( height ):
+        row = []
+        zbuffer.append( row )
+        for x in range( width ):
+            zbuffer[y].append( float('-inf') )
+    return zbuffer
+
 def plot( screen, color, x, y ):
     newy = YRES - 1 - y
     if ( x >= 0 and x < XRES and newy >= 0 and newy < YRES ):
+        screen[newy][x] = color[:]
+
+def plot( screen, zbuffer, color, x, y, z ):
+    newy = YRES - 1 - y
+    if ( x >= 0 and x < XRES and
+         newy >= 0 and newy < YRES
+         and z>zbuffer[newy][x]):
         screen[newy][x] = color[:]
 
 def clear_screen( screen ):

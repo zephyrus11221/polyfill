@@ -3,12 +3,14 @@ from matrix import *
 from math import *
 from gmath import *
 
+zbuffer[500][500] = 
+
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0);
     add_point(polygons, x1, y1, z1);
     add_point(polygons, x2, y2, z2);
 
-def draw_polygons( matrix, screen, color ):
+def draw_polygons( matrix, screen, color, zbuffer ):
     #print 'SODFGHSDFLGHSDLIUFGHSUIL'
     if len(matrix) < 2:
         print 'Need at least 3 points to draw'
@@ -92,7 +94,7 @@ def draw_polygons( matrix, screen, color ):
             while y<int(mid[1]):
                 draw_line( int(x0), y,
                            int(x1), (y),
-                           screen, colhold)
+                           screen, zbuffer, colhold)
                 x0+=rr1
                 x1+=rr2
                 y+=1
@@ -100,7 +102,7 @@ def draw_polygons( matrix, screen, color ):
             while y<int(high[1]):
                 draw_line( int(x0), (y),
                            int(x1), (y),
-                           screen, colhold)
+                           screen, zbuffer, colhold)
                 x0+=rr1
                 x1+=rr3
                 y+=1
