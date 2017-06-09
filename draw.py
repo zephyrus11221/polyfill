@@ -3,8 +3,6 @@ from matrix import *
 from math import *
 from gmath import *
 
-zbuffer[500][500] = 
-
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0);
     add_point(polygons, x1, y1, z1);
@@ -63,6 +61,7 @@ def draw_polygons( matrix, screen, color, zbuffer ):
             print low
             print mid
             print high
+
             if int(low[1]) - int(high[1]) == 0:
                 rr1 = 0
             else:
@@ -82,29 +81,48 @@ def draw_polygons( matrix, screen, color, zbuffer ):
             print rr2
             print "printing rr3:"
             print rr3
-            
+
+            if int(low[1]) - int(high[1]) == 0:
+                zr1 = 0
+            else:
+                zr1 = (low[2]-high[2])/(low[1]-high[1])
+            if int(low[1]) - int(mid[1]) == 0:
+                zr2 = 0
+            else:
+                zr2 = (low[2]-mid[2])/(low[1]-mid[1])
+            if int(high[1]) - int(mid[1]) == 0:
+                zr3 = 0
+            else:
+                zr3 = (high[2]-mid[2])/(high[1]-mid[1])
+
             x0 = low[0]
+            z0 = low[2]
             y = int(low[1])    
             x1 = low[0]
-            
+            z1 = low[2]
             if int(low[1]) == int(mid[1]):
                 x1 = mid[0]
+                z1 = mid[2]
                 print "x1 to mid"
             
             while y<int(mid[1]):
-                draw_line( int(x0), y,
-                           int(x1), (y),
+                draw_line( int(x0), y, z0,
+                           int(x1), (y), z1,
                            screen, zbuffer, colhold)
                 x0+=rr1
+                z0+=zr1
                 x1+=rr2
+                z1+=zr2
                 y+=1
             x1 = mid[0]
             while y<int(high[1]):
-                draw_line( int(x0), (y),
-                           int(x1), (y),
+                draw_line( int(x0), (y), z0,
+                           int(x1), (y), z1,
                            screen, zbuffer, colhold)
                 x0+=rr1
+                z0+=zr1
                 x1+=rr3
+                z1+=zr3
                 y+=1
         point+= 3
 
@@ -417,6 +435,7 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
     z = z0
     A = 2 * (y1 - y0)
     B = -2 * (x1 - x0)
+    C = 2 * (z1 - z0)
     wide = False
     tall = False
 
@@ -428,6 +447,7 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
         dy_east = 0
         d_east = A
         distance = x1 - x
+        #Delta x
         if ( A > 0 ): #octant 1
             d = A + B/2
             dy_northeast = 1
@@ -436,7 +456,7 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
             d = A - B/2
             dy_northeast = -1
             d_northeast = A - B
-
+        
     else: #octants 2/7
         tall = True
         dx_east = 0
@@ -456,9 +476,47 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
             d_east = -1 * B
             loop_start = y1
             loop_end = y
-
+    '''
+    if ( abs(x1-x0) >= abs(y1 - y0) ):# Zoct 1/8
+        #Delta z
+        if ( C > 0 ): #octant 1
+            dz = C + B/2
+            dz_northeast = 1
+            d_northeast = A + B
+        else: #octant 8
+            dz = C - B/2
+            dz_northeast = -1
+            d_northeast = A - B
+            
+    else: #octants 2/7
+        tall = True
+        dx_east = 0
+        dx_northeast = 1
+        distance = abs(y1 - y)
+        if ( A > 0 ): #octant 2
+            dz = C/2 + B
+            dy_east = dy_northeast = 1
+            d_northeast = A + B
+            d_east = B
+            loop_start = y
+            loop_end = y1
+        else: #octant 7
+            dz = C/2 - B
+            dy_east = dy_northeast = -1
+            d_northeast = A - B
+            d_east = -1 * B
+            loop_start = y1
+            loop_end = y
+    '''
+    if x0-x1 == 0:
+        dz = 0
+    else:
+        dz = (z0-z1)/(x0-x1)
+            
     while ( loop_start < loop_end ):
-        plot( screen, zbuffer, color, x, y, z )
+        if (zbuffer[int(y)][int(x)] <= z):
+            plot( screen, zbuffer, color, x, y, z )
+            zbuffer[int(y)][int(x)]=z
         if ( (wide and ((A > 0 and d > 0) or (A < 0 and d < 0))) or
              (tall and ((A > 0 and d < 0) or (A < 0 and d > 0 )))):
             x+= dx_northeast
@@ -468,6 +526,7 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
             x+= dx_east
             y+= dy_east
             d+= d_east
+        z+=dz
         loop_start+= 1
 
     plot( screen, zbuffer, color, x, y, z )
